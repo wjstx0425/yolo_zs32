@@ -118,19 +118,19 @@ Run: `git remote add yolo-zs32 git@github.com:wjstx0425/yolo_zs32.git`
 
 Expected: `origin` remains upstream and `yolo-zs32` points to the project repository.
 
-- [ ] **Step 2: Push the current commit as project main**
+- [x] **Step 2: Push the current commit as project main**
 
 Run: `git push -u yolo-zs32 HEAD:main`
 
 Expected: GitHub creates or updates `main`, and the local branch tracks `yolo-zs32/main`.
 
-- [ ] **Step 3: Verify remote commit equality**
+- [x] **Step 3: Verify remote commit equality**
 
 Run: `test "$(git rev-parse HEAD)" = "$(git ls-remote yolo-zs32 refs/heads/main | cut -f1)"`
 
 Expected: exit code `0`.
 
-- [ ] **Step 4: Verify final repository state**
+- [x] **Step 4: Verify final repository state**
 
 Run: `git status -sb && git remote -v`
 

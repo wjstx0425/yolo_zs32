@@ -13,6 +13,8 @@
 - GitHub publication verification installed `pytest 9.1.1` into `/home/yunjing/miniconda3/envs/yolo` because no existing interpreter provided both pytest and the training dependencies; the focused C789 suite then passed `61 passed`.
 - The reviewed code scope contains 15 changed files with no forbidden generated paths and no staged object at or above 50 MiB; its source commit message is `Add ZS32 YOLO training workflow`.
 - Git remotes are intentionally split: `origin=https://github.com/ultralytics/ultralytics.git` and `yolo-zs32=git@github.com:wjstx0425/yolo_zs32.git`.
+- First GitHub publication succeeded on 2026-07-13: local `c789-defect-yolo` tracks `yolo-zs32/main`, and `git ls-remote` matched source commit `d07a2d1b2eca8283dbc5f735f02e6e106b9f991d` before the final publication-record update.
+- Because the local branch is `c789-defect-yolo` while its tracked remote branch is `main`, the default `git push` under `push.default=simple` refuses the name mismatch; use `git push yolo-zs32 HEAD:main` for future publication.
 
 ## ZS32 six-view single-class YOLO training (2026-07-12)
 
