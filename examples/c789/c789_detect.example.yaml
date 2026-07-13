@@ -1,0 +1,6 @@
+# Example only. Generate the real file from anomalib stage 21.
+path: /home/yunjing/anomalib/dataset/c789_yolo
+train: images/train
+val: images/val
+names:
+  0: defect

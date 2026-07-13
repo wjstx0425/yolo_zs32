@@ -5,9 +5,14 @@
 - Approved target repository: `git@github.com:wjstx0425/yolo_zs32.git`.
 - Keep `origin` attached to upstream Ultralytics and use a separate `yolo-zs32` remote for the project repository.
 - GitHub is code-only: commit C789/ZS32 source, tests, docs, and this memory; never commit root `dataset/`, `runs/`, weights, checkpoints, or generated training artifacts.
+- Root `dataset/` is enforced by the `/dataset/` rule in `.gitignore`; existing upstream rules already cover `runs/`, `weights/`, and model artifact extensions.
 - Publish the current `c789-defect-yolo` work as remote `main`; transfer the approximately 16 GB dataset to the training server separately with `rsync` or equivalent storage.
 - Publishing design: `docs/superpowers/specs/2026-07-13-yolo-zs32-github-publish-design.md`.
+- Publishing implementation plan: `docs/superpowers/plans/2026-07-13-yolo-zs32-github-publish.md`.
 - This checkout initially had no Git author identity; reuse the existing workspace repository identity `wjstx0425 <lijunlai@sjtu.edu.cn>` as a repository-local setting, not a global setting.
+- GitHub publication verification installed `pytest 9.1.1` into `/home/yunjing/miniconda3/envs/yolo` because no existing interpreter provided both pytest and the training dependencies; the focused C789 suite then passed `61 passed`.
+- The reviewed code scope contains 15 changed files with no forbidden generated paths and no staged object at or above 50 MiB; its source commit message is `Add ZS32 YOLO training workflow`.
+- Git remotes are intentionally split: `origin=https://github.com/ultralytics/ultralytics.git` and `yolo-zs32=git@github.com:wjstx0425/yolo_zs32.git`.
 
 ## ZS32 six-view single-class YOLO training (2026-07-12)
 
