@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import csv
 import math
+from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Iterable, Mapping, Sequence
+from typing import Any
 
 
 @dataclass(frozen=True)

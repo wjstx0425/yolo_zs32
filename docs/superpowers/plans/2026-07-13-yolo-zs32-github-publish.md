@@ -20,10 +20,12 @@
 ### Task 1: Enforce and verify the code-only boundary
 
 **Files:**
+
 - Modify: `.gitignore`
 - Modify: `AGENTS_MEMORY.md`
 
 **Interfaces:**
+
 - Consumes: the existing root-level ignore rules for generated artifacts.
 - Produces: a root `/dataset/` ignore rule used by Git status and staging.
 
@@ -52,6 +54,7 @@ Expected: no output.
 ### Task 2: Validate and commit the reviewed source scope
 
 **Files:**
+
 - Add: `docs/superpowers/plans/2026-07-12-zs32-six-view-yolo-training.md`
 - Add: `docs/superpowers/plans/2026-07-13-zs32-yolo-parameter-sweep.md`
 - Add: `docs/superpowers/plans/2026-07-13-yolo-zs32-github-publish.md`
@@ -62,6 +65,7 @@ Expected: no output.
 - Modify: `AGENTS_MEMORY.md`
 
 **Interfaces:**
+
 - Consumes: the approved untracked C789/ZS32 source, tests, and documents.
 - Produces: one reviewed code commit ready for remote publication.
 
@@ -106,9 +110,11 @@ Expected: one new commit containing the reviewed code-only scope.
 ### Task 3: Configure and verify GitHub publication
 
 **Files:**
+
 - Modify: `.git/config` through `git remote add` only.
 
 **Interfaces:**
+
 - Consumes: the clean reviewed local commit and accessible GitHub SSH repository.
 - Produces: `yolo-zs32/main` pointing at the local `c789-defect-yolo` commit.
 
