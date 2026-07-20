@@ -12,9 +12,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from examples.c789 import zs32_sweep_metrics as metrics
 from examples.c789 import sweep_zs32 as sweep
-
+from examples.c789 import zs32_sweep_metrics as metrics
 
 RESULT_FIELDS = [
     "epoch",
@@ -969,7 +968,19 @@ def test_zs32_sweep_standard_val_thresholds_do_not_change_operational_predict_th
         def train(self, **kwargs):
             run_dir = Path(kwargs["project"]) / kwargs["name"]
             (run_dir / "weights").mkdir(parents=True)
-            _write_results_csv(run_dir / "results.csv", [{"epoch": 1, "time": 1, "metrics/precision(B)": .5, "metrics/recall(B)": .5, "metrics/mAP50(B)": .5, "metrics/mAP50-95(B)": .5}])
+            _write_results_csv(
+                run_dir / "results.csv",
+                [
+                    {
+                        "epoch": 1,
+                        "time": 1,
+                        "metrics/precision(B)": 0.5,
+                        "metrics/recall(B)": 0.5,
+                        "metrics/mAP50(B)": 0.5,
+                        "metrics/mAP50-95(B)": 0.5,
+                    }
+                ],
+            )
             (run_dir / "weights" / "best.pt").touch()
             self.trainer = SimpleNamespace(save_dir=run_dir, peak_gpu_memory_gb=0.0)
 
@@ -1246,8 +1257,12 @@ def test_zs32_sweep_screen_metrics_uses_latest_valid_attempt_per_source(tmp_path
         imgsz=640,
         batch=64,
     )
-    first = _fake_completed_result(SimpleNamespace(**{**source.__dict__, "trial_id": "screen_n640_p0_seed42__resume1"}), score=0.1)
-    second = _fake_completed_result(SimpleNamespace(**{**source.__dict__, "trial_id": "screen_n640_p0_seed42__resume2"}), score=0.2)
+    first = _fake_completed_result(
+        SimpleNamespace(**{**source.__dict__, "trial_id": "screen_n640_p0_seed42__resume1"}), score=0.1
+    )
+    second = _fake_completed_result(
+        SimpleNamespace(**{**source.__dict__, "trial_id": "screen_n640_p0_seed42__resume2"}), score=0.2
+    )
 
     def attempt(result):
         return {
@@ -1344,9 +1359,7 @@ def test_zs32_sweep_oom_half_batch_retry_occurs_only_once_across_resume(tmp_path
     assert calls == [trial.trial_id, f"{trial.trial_id}__oom_b{trial.batch // 2}"]
     assert sweep.main([*argv, "--resume"], yolo_factory=object()) == 1
     state = json.loads((Path(args.project).resolve() / args.experiment_id / "state.json").read_text())
-    half_batch_attempts = [
-        attempt for attempt in state["attempts"] if attempt["effective_batch"] == trial.batch // 2
-    ]
+    half_batch_attempts = [attempt for attempt in state["attempts"] if attempt["effective_batch"] == trial.batch // 2]
     assert len(half_batch_attempts) == 1
     assert len(calls) == 3
 
@@ -1374,9 +1387,7 @@ def test_zs32_sweep_resume_runs_pending_half_batch_after_primary_oom_was_persist
     assert sweep.main([*argv, "--resume"], yolo_factory=object()) == 0
     assert len(calls) == 1
     persisted = json.loads(state_path.read_text(encoding="utf-8"))
-    half_attempts = [
-        attempt for attempt in persisted["attempts"] if attempt["effective_batch"] == trial.batch // 2
-    ]
+    half_attempts = [attempt for attempt in persisted["attempts"] if attempt["effective_batch"] == trial.batch // 2]
     assert len(half_attempts) == 1
 
 
@@ -1430,9 +1441,7 @@ def test_zs32_sweep_finalists_retrain_original_weights_and_test_only_final(tmp_p
         profile_bonus = int(trial.profile[1]) / 100
         result = _fake_completed_result(trial, score=family_bonus + profile_bonus)
         if trial.stage == "final":
-            grouped = [
-                metrics.GroupedMetrics("all", "all", 1, 1, 1, 1, 1.0, 1, 1, 1.0, 0, 0, 0.0)
-            ]
+            grouped = [metrics.GroupedMetrics("all", "all", 1, 1, 1, 1, 1.0, 1, 1, 1.0, 0, 0, 0.0)]
             metrics.write_grouped_metrics_csv(Path(result.run_dir) / "grouped_metrics.csv", grouped)
         return result
 
@@ -1462,8 +1471,7 @@ def test_zs32_sweep_run_trial_calls_test_only_for_finalist(tmp_path):
     _label_path = test_positive.parents[2] / "labels" / "test" / "test_positive.txt"
     _label_path.write_text("0 0.5 0.5 0.2 0.2\n", encoding="utf-8")
     args.manifest.write_text(
-        "output_image,split,view,hand,defect_type,kind\n"
-        f"{test_positive},test,front,left,less,defect\n",
+        f"output_image,split,view,hand,defect_type,kind\n{test_positive},test,front,left,less,defect\n",
         encoding="utf-8",
     )
     split_calls = []
@@ -1475,7 +1483,19 @@ def test_zs32_sweep_run_trial_calls_test_only_for_finalist(tmp_path):
         def train(self, **kwargs):
             run_dir = Path(kwargs["project"]) / kwargs["name"]
             (run_dir / "weights").mkdir(parents=True)
-            _write_results_csv(run_dir / "results.csv", [{"epoch": 1, "time": 1, "metrics/precision(B)": .5, "metrics/recall(B)": .5, "metrics/mAP50(B)": .5, "metrics/mAP50-95(B)": .5}])
+            _write_results_csv(
+                run_dir / "results.csv",
+                [
+                    {
+                        "epoch": 1,
+                        "time": 1,
+                        "metrics/precision(B)": 0.5,
+                        "metrics/recall(B)": 0.5,
+                        "metrics/mAP50(B)": 0.5,
+                        "metrics/mAP50-95(B)": 0.5,
+                    }
+                ],
+            )
             (run_dir / "weights" / "best.pt").touch()
             self.trainer = SimpleNamespace(save_dir=run_dir)
 

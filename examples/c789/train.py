@@ -7,9 +7,9 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from ultralytics import YOLO
-
 from _common import parse_overrides
+
+from ultralytics import YOLO
 
 
 def parse_batch(value: str) -> int | float:
