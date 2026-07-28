@@ -35,14 +35,14 @@ These tools would add dependencies that are not installed locally. Their schedul
 
 ### Model, resolution, and batch bindings
 
-| Combination | Model | imgsz | batch |
-|---|---|---:|---:|
-| `n640` | `yolo26n.pt` | 640 | 64 |
-| `n1280` | `yolo26n.pt` | 1280 | 24 |
-| `n1536` | `yolo26n.pt` | 1536 | 16 |
-| `m640` | `yolo26m.pt` | 640 | 32 |
-| `m1280` | `yolo26m.pt` | 1280 | 8 |
-| `m1536` | `yolo26m.pt` | 1536 | 8 |
+| Combination | Model        | imgsz | batch |
+| ----------- | ------------ | ----: | ----: |
+| `n640`      | `yolo26n.pt` |   640 |    64 |
+| `n1280`     | `yolo26n.pt` |  1280 |    24 |
+| `n1536`     | `yolo26n.pt` |  1536 |    16 |
+| `m640`      | `yolo26m.pt` |   640 |    32 |
+| `m1280`     | `yolo26m.pt` |  1280 |     8 |
+| `m1536`     | `yolo26m.pt` |  1536 |     8 |
 
 Batch is a resource binding, not an independent Cartesian-product dimension. If a trial raises CUDA OOM before completing its first epoch, the runner records the failure and may retry exactly once at half batch when `--oom-retry` is enabled. The retry becomes a distinct recorded configuration and never silently replaces the requested batch.
 
@@ -50,10 +50,10 @@ Batch is a resource binding, not an independent Cartesian-product dimension. If 
 
 All profiles use `degrees=0`, `fliplr=0`, `flipud=0`, `mosaic=0`, `mixup=0`, `cutmix=0`, `copy_paste=0`, `shear=0`, and `perspective=0`.
 
-| Profile | Optimizer and augmentation |
-|---|---|
-| `P0_no_aug` | `optimizer=auto`, `translate=0`, `scale=0`, `hsv_h=0`, `hsv_s=0`, `hsv_v=0` |
-| `P1_conservative` | `optimizer=auto`, `translate=0.03`, `scale=0.10`, `hsv_h=0.005`, `hsv_s=0.20`, `hsv_v=0.15` |
+| Profile           | Optimizer and augmentation                                                                            |
+| ----------------- | ----------------------------------------------------------------------------------------------------- |
+| `P0_no_aug`       | `optimizer=auto`, `translate=0`, `scale=0`, `hsv_h=0`, `hsv_s=0`, `hsv_v=0`                           |
+| `P1_conservative` | `optimizer=auto`, `translate=0.03`, `scale=0.10`, `hsv_h=0.005`, `hsv_s=0.20`, `hsv_v=0.15`           |
 | `P2_adamw_cosine` | P1 augmentation plus `optimizer=AdamW`, `lr0=0.001`, `lrf=0.01`, `cos_lr=True`, `weight_decay=0.0005` |
 
 The matrix contains `6 × 3 = 18` screening trials.
@@ -102,6 +102,9 @@ The leaderboard contains every raw metric, so users can re-sort without rerunnin
 Create `examples/c789/sweep_zs32.py` with these testable boundaries:
 
 ```python
+from __future__ import annotations
+
+
 def build_parser() -> argparse.ArgumentParser: ...
 def build_experiment_plan(args: argparse.Namespace) -> list[TrialSpec]: ...
 def build_train_kwargs(trial: TrialSpec, args: argparse.Namespace) -> dict[str, object]: ...
