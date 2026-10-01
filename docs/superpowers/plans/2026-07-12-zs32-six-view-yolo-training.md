@@ -21,6 +21,7 @@
 ### Task 1: Dataset integrity gate
 
 **Files:**
+
 - Read: `/home/yunjing/anomalib/dataset/zs32_six_view_roi_yolo/data.yaml`
 - Read: `/home/yunjing/anomalib/dataset/zs32_six_view_roi_yolo/split_manifest.csv`
 - Read: `/home/yunjing/anomalib/dataset/zs32_six_view_roi_yolo/{train,val,test}/{images,labels}`
@@ -33,6 +34,7 @@
 ### Task 2: ROI mirror and visual gate
 
 **Files:**
+
 - Read: `/home/yunjing/anomalib/capture_data/zs32_view_roi_dataset.py`
 - Read: `/home/yunjing/anomalib/pipeline/29_zs32_fixed_roi.py`
 - Read: `/home/yunjing/anomalib/dataset/zs32_six_view_roi_config.json`
@@ -45,6 +47,7 @@
 ### Task 3: Runtime and smoke test
 
 **Files:**
+
 - Read: `/home/yunjing/ultralytics-c789/pyproject.toml`
 - Read: locally available `*.pt` weights.
 - Write: `/home/yunjing/ultralytics-c789/runs/zs32/*`
