@@ -10,9 +10,9 @@ import json
 import math
 import re
 import sys
+from contextlib import contextmanager
 from dataclasses import dataclass, replace
 from datetime import datetime, timezone
-from contextlib import contextmanager
 from pathlib import Path
 from types import MappingProxyType
 from typing import Any, Callable, Mapping, Sequence
@@ -24,7 +24,6 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from examples.c789 import zs32_sweep_metrics as metrics
-
 
 DEFAULT_PROJECT = Path("/home/yunjing/ultralytics-c789/runs/zs32_sweep")
 DEFAULT_DATA_YAML = Path("/home/yunjing/anomalib/dataset/zs32_six_view_roi_yolo/data.yaml")
@@ -327,8 +326,8 @@ def _trial_record(trial: TrialSpec, *, include_output: bool = True) -> dict[str,
 def plan_hash(trials: Sequence[TrialSpec]) -> str:
     """Hash scientific inputs while excluding invocation stage and output location.
 
-    Excluding stage lets one experiment ID continue from a screen invocation to
-    a later final invocation. Selection and evaluation settings remain hashed.
+    Excluding stage lets one experiment ID continue from a screen invocation to a later final invocation. Selection and
+    evaluation settings remain hashed.
     """
     payload = []
     for trial in trials:
@@ -398,7 +397,7 @@ def _empty_label_fpr(predictions: Sequence[object]) -> float:
     empty_count = 0
     false_positive_count = 0
     for prediction in predictions:
-        image_path = Path(str(getattr(prediction, "path")))
+        image_path = Path(str(prediction.path))
         label_path = _label_path(image_path)
         if not label_path.is_file():
             raise FileNotFoundError(f"label file is missing for prediction image {image_path}: {label_path}")
@@ -483,7 +482,9 @@ def _manifest_root(manifest: Path, rows: Sequence[Mapping[str, str]]) -> Path:
     if not relative_paths:
         return manifest.parent.resolve()
     candidates = list(dict.fromkeys((manifest.parent, *manifest.parents)))
-    matches = [candidate.resolve() for candidate in candidates if all((candidate / path).exists() for path in relative_paths)]
+    matches = [
+        candidate.resolve() for candidate in candidates if all((candidate / path).exists() for path in relative_paths)
+    ]
     if len(matches) != 1:
         raise ValueError(f"cannot resolve one unambiguous manifest path root for {manifest}: {matches}")
     return matches[0]
@@ -499,7 +500,7 @@ def _write_final_grouped_metrics(
     ground_truth: dict[Path, Sequence[Sequence[float]]] = {}
     predicted: dict[Path, Sequence[Sequence[float]]] = {}
     for prediction in predictions:
-        image_path = Path(str(getattr(prediction, "path"))).resolve()
+        image_path = Path(str(prediction.path)).resolve()
         image_shape = getattr(prediction, "orig_shape", None)
         if image_shape is None:
             raise ValueError(f"prediction has no orig_shape: {image_path}")
@@ -900,16 +901,10 @@ def _execute_trial(
         for attempt in existing
     )
     pending_half_retry = (
-        args.resume
-        and args.oom_retry
-        and trial.batch > 1
-        and oom_retry_consumed
-        and not half_retry_recorded
+        args.resume and args.oom_retry and trial.batch > 1 and oom_retry_consumed and not half_retry_recorded
     )
     if pending_half_retry:
-        candidates = [
-            replace(trial, trial_id=f"{trial.trial_id}__oom_b{retry_batch}", batch=retry_batch)
-        ]
+        candidates = [replace(trial, trial_id=f"{trial.trial_id}__oom_b{retry_batch}", batch=retry_batch)]
     else:
         primary = trial
         if args.resume and (existing or stale_directory):
@@ -921,9 +916,7 @@ def _execute_trial(
             primary = replace(trial, trial_id=resume_id)
         candidates = [primary]
         if args.oom_retry and trial.batch > 1 and not oom_retry_consumed:
-            candidates.append(
-                replace(primary, trial_id=f"{primary.trial_id}__oom_b{retry_batch}", batch=retry_batch)
-            )
+            candidates.append(replace(primary, trial_id=f"{primary.trial_id}__oom_b{retry_batch}", batch=retry_batch))
 
     for index, candidate in enumerate(candidates):
         attempt = _attempt_record(candidate, trial, requested_batch)
