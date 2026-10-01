@@ -24,10 +24,12 @@
 ### Task 1: Pure metrics and ranking module
 
 **Files:**
+
 - Create: `examples/c789/zs32_sweep_metrics.py`
 - Create: `tests/test_c789_examples.py`
 
 **Interfaces:**
+
 - Produces `EpochMetrics`, `TrialMetrics`, `read_best_epoch(path)`, `rank_trials(rows)`, `select_finalists(rows, count=3)`, `box_iou()`, `match_boxes()`, `summarize_grouped_predictions()`, `write_leaderboard_csv()`, `write_leaderboard_markdown()`, and `write_grouped_metrics_csv()`.
 - Ranking key is descending mAP50-95, descending recall, ascending empty-label FPR, descending mAP50, ascending mean epoch seconds.
 - Finalists are best n, best m, then best remaining, without duplicates.
@@ -68,6 +70,7 @@ class EpochMetrics:
     map50: float
     map50_95: float
 
+
 @dataclass(frozen=True)
 class TrialMetrics:
     trial_id: str
@@ -107,10 +110,12 @@ Run the focused pytest command; require no test failures.
 ### Task 2: Experiment plan, CLI, and dry-run orchestration
 
 **Files:**
+
 - Create: `examples/c789/sweep_zs32.py`
 - Modify: `tests/test_c789_examples.py`
 
 **Interfaces:**
+
 - Consumes all Task 1 metric types/functions.
 - Produces frozen `TrialSpec`, `MODEL_RESOLUTION_BATCH`, `TRAINING_PROFILES`, `build_parser()`, `build_experiment_plan(args)`, `build_train_kwargs(trial,args)`, `plan_hash()`, `atomic_write_json()`, `run_trial()`, and `main(argv=None,yolo_factory=None)`.
 - Exact resource bindings: `n640=64`, `n1280=24`, `n1536=16`, `m640=32`, `m1280=8`, `m1536=8`.
@@ -167,12 +172,14 @@ Run focused pytest; require `FakeYOLO` tests to pass without torch/CUDA access.
 ### Task 3: Resume, OOM retry, reports, docs, and real dry-run
 
 **Files:**
+
 - Modify: `examples/c789/sweep_zs32.py`
 - Modify: `examples/c789/README.md`
 - Modify: `tests/test_c789_examples.py`
 - Modify: `AGENTS_MEMORY.md`
 
 **Interfaces:**
+
 - State schema includes `plan_hash`, `experiment_id`, `stage`, and per-attempt `trial_id`, `status`, timestamps, requested/effective batch, run directory, error, metrics, and artifacts.
 - Completed-trial validity requires status complete, parseable `results.csv`, and existing `best.pt`.
 
