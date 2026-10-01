@@ -8,8 +8,6 @@ import argparse
 from pathlib import Path
 from typing import Any
 
-from ultralytics import YOLO
-
 from _common import (
     defect_type_from_class,
     infer_slot_id,
@@ -19,6 +17,8 @@ from _common import (
     part_id_for_path,
     write_fusion_csv,
 )
+
+from ultralytics import YOLO
 
 
 def build_parser() -> argparse.ArgumentParser:
